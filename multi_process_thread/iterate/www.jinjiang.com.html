@@ -1,0 +1,113 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>WeHotel中央结算系统</title>
+	<meta name="renderer" content="webkit">
+	<link href="/static/img/favicon.png" rel="shortcut icon">
+	<link rel="stylesheet" href="/static/js/plugin/beyond-admin/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/static/js/plugin/beyond-admin/css/beyond.min.css" />
+	<link rel="stylesheet" href="/static/js/plugin/beyond-admin/css/skins/black.min.css" />
+	<link rel="stylesheet" href="/static/js/plugin/beyond-admin/css/font-awesome.min.css" />
+	<link href="/static/css/ac-login.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+		<div class="box-holder row">
+			<!-- Title -->
+			<h3>
+			<img src="/static/img/wehotel-logo.png" alt="WeHotel中央结算系统" class="img-logo">
+			<div class="title_box">
+			<span class="title">WeHotel中央结算系统</span>
+			</div>
+			</h3>
+			<hr>
+			<div class="login-f" style="display:none;"></div>
+			<!-- Login Form -->
+			<form method="post" action="#" class="form-horizontal form-login" role="form">
+				<div class="form-group">
+					<label for="inputUser" class="col-xs-4 control-label">登录账户：</label>
+					<div class="col-xs-8">
+						<div class="input-group">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-user"></i>
+							</span>
+							<input name="name" type="text" class="form-control" value="" id="inputUser" placeholder="请输入登录账户">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword" class="col-xs-4 control-label">登录密码：</label>
+					<div class="col-xs-8">
+						<div class="input-group">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-lock"></i>
+							</span>
+							<input name="password" type="password" class="form-control" value="" id="inputPassword" placeholder="请输入登录密码">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-offset-2 col-lg-10">
+						<input id="screen" type="hidden" name="screen" value="NONE" />
+						<button type="button" class="btn btn-primary signinBtn">&nbsp;&nbsp;&nbsp;登录&nbsp;&nbsp;</button>
+					</div>
+				</div>
+			</form>
+		</div>
+<script type="text/javascript" src="/static/js/plugin/beyond-admin/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="/static/js/Base.js"></script>
+<script type="text/javascript" src="/static/js/plugin/validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/static/js/plugin/beyond-admin/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/plugin/beyond-admin/js/beyond.min.js"></script>
+<script type="text/javascript" src="/static/js/plugin/beyond-admin/js/select2/select2.js"></script>
+<script type="text/javascript" src="/static/js/User-init.js"></script>
+<script type="text/javascript">
+$(function(){
+});
+</script>
+		<script type="text/javascript">
+		$(function() {
+			var screen=window.screen.width+"_"+window.screen.height;
+			$('#screen').val(screen);
+			$('.login-f').html('');
+			$('.login-f').hide();
+			$('.signinBtn').click(function() {
+				$('.login-f').html('');
+				$('.login-f').hide();
+				Base.loading(true);
+				$.post("/login", {name: $('#inputUser').val(), password: $('#inputPassword').val(), screen: $('#screen').val()}, function(rs) {
+					Base.loading(false);
+					if (rs && 200 == rs.status) {
+						if(rs.message){
+							Base.alert(rs.message,function(){
+								location.href = '/framePage';
+							});
+						}else{
+							location.href = '/framePage';
+						}
+					}else{
+						$('.login-f').html('验证失败，'+ rs.message);
+						$('.login-f').show();
+					}
+				});
+			});
+			
+			document.onkeydown=function(event){
+				if(navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE8.0"){
+					if(window.event.keyCode==13){
+				        $('.signinBtn').click();   
+				        return false;                               
+				    }
+				}else{
+					if(event.keyCode==13){
+				        $('.signinBtn').click();   
+				        return false;                               
+				    }
+				}
+		    }		    
+		});
+		</script>
+</body>
+</html>
